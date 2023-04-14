@@ -1,10 +1,10 @@
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "prisma_user" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "email" TEXT NOT NULL,
     "name" TEXT,
-    "Admin" BOOLEAN NOT NULL
+    "password" TEXT NOT NULL
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "prisma_user_email_key" ON "prisma_user"("email");

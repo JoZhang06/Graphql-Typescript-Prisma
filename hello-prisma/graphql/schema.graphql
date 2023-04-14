@@ -2,13 +2,13 @@ type User {
   id: Int!
   email: String!
   name: String
-  admin: Boolean!
+  password: String!
 }
 
 input UserInput {
   email: String!
   name: String
-  admin: Boolean!
+  password: String!
 }
 
 type Query {

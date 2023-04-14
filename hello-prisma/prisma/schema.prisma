@@ -10,9 +10,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model prisma_user {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
-  Admin  Boolean
+  password String
 }

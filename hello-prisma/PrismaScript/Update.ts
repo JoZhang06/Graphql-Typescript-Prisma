@@ -3,12 +3,12 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-    const user = await prisma.user.update({
+    const user = await prisma.prisma_user.update({
         where: { id: 1 },
         data: {
             name: 'Joe',
             email: 'Joe@prisma.io',
-            Admin: true
+            password: "12345"
         },
     })
     console.log(user)
