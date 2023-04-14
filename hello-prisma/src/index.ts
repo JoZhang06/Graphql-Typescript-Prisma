@@ -1,28 +1,60 @@
-import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import resolvers  from './resolvers';
-import typeDefs from './typeDefs';
+import { ApolloServer, gql } from 'apollo-server';
+import { PrismaClient } from '@prisma/client';
 
-async function startApolloServer() {
-    const app = express();
-    const schema = makeExecutableSchema({ typeDefs, resolvers });
+const prisma = new PrismaClient();
 
-    const server = new ApolloServer({
-        schema,
-    });
+const typeDefs = gql`
+  type User {
+    id: Int!
+    email: String!
+    name: String!
+    admin: Boolean!
+  }
 
-    await server.start();
+  type Query {
+    users: [User!]!
+    user(id: Int!): User
+  }
 
-    server.applyMiddleware({ app });
+  type Mutation {
+    createUser(email: String!, name: String!, admin: Boolean!): User!
+    updateUser(id: Int!, email: String, name: String, admin: Boolean): User!
+    deleteUser(id: Int!): User!
+  }
+`;
 
-    const port = 4000;
-    await new Promise<void>((resolve) => app.listen({ port }, resolve));
+const resolvers = {
+  Query: {
+    users: async () => {
+      return prisma.user.findMany();
+    },
+    user: async (_parent: any, args: { id: any; }) => {
+      const { id } = args;
+      return prisma.user.findUnique({ where: { id } });
+    },
+  },
+  Mutation: {
+    createUser: async (_parent: any, args: { email: any; name: any; admin: any; }) => {
+      const { email, name, admin } = args;
+      return prisma.user.create({ data: { email, name, Admin: admin } });
+    },
+    updateUser: async (_parent: any, args: { id: any; email: any; name: any; admin: any; }) => {
+      const { id, email, name, admin } = args;
+      return prisma.user.update({
+        where: { id },
+        data: { email, name, Admin: admin },
+      });
+    },
+    deleteUser: async (_parent: any, args: { id: any; }) => {
+      const { id } = args;
+      return prisma.user.delete({ where: { id } });
+    },
+  },
 
-    console.log(`Server listening on http://localhost:${port}${server.graphqlPath}`);
-}
+};
 
-startApolloServer().catch((err) => {
-    console.error(err);
-    process.exit(1);
+const server = new ApolloServer({ typeDefs, resolvers });
+
+server.listen().then(({ url }) => {
+  console.log(`Server ready at ${url}`);
 });

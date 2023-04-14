@@ -1,0 +1,41 @@
+query {
+  users {
+    id
+    email
+    name
+    admin
+  }
+}
+
+query {
+  user(id: 1) {
+    id
+    email
+    name
+    admin
+  }
+}
+mutation {
+  createUser(email: "nuevo@ejemplo.com", name: "Nuevo Usuario", admin: false) {
+    id
+    email
+    name
+    admin
+  }
+}
+mutation {
+  updateUser(id: 1, name: "Usuario Actualizado", admin: true) {
+    id
+    email
+    name
+    admin
+  }
+}
+mutation {
+  deleteUser(id: 1) {
+    id
+    email
+    name
+    admin
+  }
+}
