@@ -23,5 +23,7 @@ npm install express apollo-server-express @graphql-tools/schema
 
 npm install apollo-server graphql
 
+npm install @apollo/client react
+
 //To run index
 npx ts-node ./src/index.ts  
