@@ -1,10 +1,22 @@
+
+
+console.log(process.argv);
+
+const argsID: number =  +process.argv[0];
+
+console.log({argsID});
+
+
+
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+
+
 async function main() {
     const user = await prisma.prisma_user.delete({
-        where: { id: 1 }
+        where: { id: argsID }
     })
     console.log(user)
 }

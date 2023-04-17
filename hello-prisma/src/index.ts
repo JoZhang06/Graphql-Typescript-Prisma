@@ -33,34 +33,43 @@ const resolvers = {
     users: async () => {
       return prisma.prisma_user.findMany();
     },
-    user: async (_parent: any, args: { id: any; }) => {
+    user: async (args: { id: number; }) => {
       const { id } = args;
       return prisma.prisma_user.findUnique({ where: { id } });
     },
   },
   Mutation: {
-    createUser: async (_parent: any, args: { email: any; name: any; password: any; }) => {
+    createUser: async (args: { email: string; name: string; password: string; }) => {
       const { email, name, password } = args;
+
+      console.log({ email, name, password });
+
       return prisma.prisma_user.create({ data: { email, name, password } });
     },
-    updateUser: async (_parent: any, args: { id: any; email: any; name: any; password: any; }) => {
+    updateUser: async (args: { id: number; email: string; name: string; password: string; }) => {
       const { id, email, name, password } = args;
       return prisma.prisma_user.update({
         where: { id },
         data: { email, name, password },
       });
     },
-    deleteUser: async (_parent: any, args: { id: any; }) => {
-      const { id } = args;
-      return prisma.prisma_user.delete({ where: { id } });
+    deleteUser: async ({ id }: { id?: number }) => {
+      return prisma.prisma_user.delete({
+        where: {
+          id: id
+        }
+      });
     },
-    // createUniqueIndex: async (_parent: any, args: { indexName: any; tableName: any; columnName: any; }) => {
-    //   const { indexName, tableName, columnName } = args;
-    //   await prisma.$executeRaw(`CREATE UNIQUE INDEX ${indexName} ON ${tableName}(${columnName})`);
-    //   return { indexName };
-    // },
+
+
   },
 };
+createUniqueIndex: async (args: { indexName: string; tableName: string; columnName: string }) => {
+  const { indexName, tableName, columnName } = args;
+  await prisma.$executeRaw(`CREATE UNIQUE INDEX ${indexName} ON ${tableName}(${columnName})`);
+  return { indexName };
+}
+
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
