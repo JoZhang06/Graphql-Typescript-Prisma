@@ -16,6 +16,7 @@ if this no works use de command line under
 npm install -g graphql-codegen
 
 npx graphql-codegen --config codegen.yml
+
 npm install express --save
 
 npm install express apollo-server-express @graphql-tools/schema
